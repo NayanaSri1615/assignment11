@@ -32,7 +32,7 @@
           }
 
           .container2 {
-               margin-bottom: 50px;
+               margin-bottom: 20px;
           }
 
           .cInput {
@@ -49,6 +49,9 @@
                padding: 10px;
                border: 1px solid #ccc;
                border-radius: 6px;
+               background-color: rgba(67, 67, 239, 0.687);
+               opacity: 0.8;
+               color: white;
           }
 
           .cInput button {
@@ -59,6 +62,13 @@
                border-radius: 6px;
                font-weight: bold;
                cursor: pointer;
+          }
+
+          .error {
+               color: #ff4d4d;
+               margin-bottom: 20px;
+               height: 20px;
+               font-weight: bold;
           }
 
           .container3 {
@@ -94,8 +104,9 @@
           </div>
 
           <div class="container2">
+               <div class="error" id="error"></div>
                <div class="cInput">
-                    <input style="background-color: rgba(67, 67, 239, 0.687);opacity: 0.8; " type="date" id="date">
+                    <input type="date" id="date">
                     <button id="btn">Calculate</button>
                </div>
           </div>
@@ -118,9 +129,23 @@
 
      <script>
           document.getElementById("btn").addEventListener("click", function () {
-               const birthDate = new Date(document.getElementById("date").value);
+               const birthDateInput = document.getElementById("date").value;
+               const errorMsg = document.getElementById("error");
+
+               if (!birthDateInput) {
+                    errorMsg.textContent = "Please select a date.";
+                    return;
+               }
+
+               const birthDate = new Date(birthDateInput);
                const today = new Date();
 
+               if (birthDate > today) {
+                    errorMsg.textContent = "Future date not allowed!";
+                    return;
+               }
+
+               errorMsg.textContent = ""; // clear previous error
 
                let years = today.getFullYear() - birthDate.getFullYear();
                let months = today.getMonth() - birthDate.getMonth();
